@@ -79,6 +79,60 @@ const displayMovements = (movements) => {
 
 displayMovements(account1.movements);
 
+// CHECKING TOTAL BALANCE
+const calcDisplayBalance = (movements) => {
+  const balance = movements.reduce((acc, mov) => {
+    return acc + mov;
+  }, 0);
+
+  labelBalance.textContent = `${balance} EUR`;
+};
+
+calcDisplayBalance(account1.movements);
+
+// CHECKING TOTAL DEPOSIT & WITHDRAWL
+const calcDisplaySummary = (movements) => {
+  // CHECKING TOTAL DEPOSIT
+  const incomes = movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  labelSumIn.textContent = `${incomes}€`;
+
+  // CHECKING TOTAL WITHDRAWL
+  const outgoing = movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  labelSumOut.textContent = `${Math.abs(outgoing)}€`;
+
+  // CHECKING TOTAL INTEREST RATE
+  const interest = movements
+    .filter((mov) => mov > 0)
+    .map((deposit) => (deposit * 1.2) / 100)
+    // INCLUDING ONLY VALUES GREATER THAN 1
+    .filter((int) => int >= 1)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+calcDisplaySummary(account1.movements);
+
+// creating some side effects (do some work without returning anything)
+const createUsernames = (accounts) => {
+  accounts.forEach((account) => {
+    account.username = account.owner
+      .toLowerCase()
+      .split(" ")
+      .map((name) => {
+        return name[0];
+      })
+      .join("");
+  });
+};
+createUsernames(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
